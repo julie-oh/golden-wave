@@ -1,5 +1,6 @@
 <html>
   <head>
+    <meta charset="UTF-8">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.16/p5.js"></script>
     <script language="javascript" type="text/javascript" src="https://cdn.rawgit.com/generative-light/p5.scribble.js/master/p5.scribble.js"></script>
     <script language="javascript" type="text/javascript" src="./p5.scribble.js"></script>
@@ -13,8 +14,16 @@
         scribble.scribbleLine(400, 800, 800, 800);
       }
     </script>
+    <script language="javascript" src="./audio_player.js"></script>
   </head>
   <body>
+    <div>
+      <input id="audiofile" type="file" />
+    </div>
+  <script language="javascript">
+    var audioPlayer = new AudioPlayer();
+    audioPlayer.addLoadEventHandler("audiofile");
+  </script>
   </body>
 </html>
 
