@@ -2,11 +2,14 @@
  * Audio Player class for audio playback.
  */
 class AudioPlayer {
-  constructor() {
+  constructor(scribble) {
     this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     this.dst = this.audioCtx.destination;
     this.bufferSource = this.audioCtx.createBufferSource();
     this.addLoadEventHandler('audiofile');
+    this.analyzer = this.audioCtx.createAnalyser();
+    this.analyzer.fftSize = 1024;
+    this.scribble = scribble;
   }
 
   /**
@@ -24,12 +27,45 @@ class AudioPlayer {
       fileReader.onload = (e) => {
         this.audioCtx.decodeAudioData(e.target.result).then((buffer) => {
           this.bufferSource.buffer = buffer;
-          this.bufferSource.connect(this.dst);
+          this.bufferSource.connect(this.analyzer);
+          this.analyzer.connect(this.dst);
           this.bufferSource.start(0);  // start playing right away
+          this.drawWaveForm();
         });
-      }
+      };
 
       fileReader.readAsArrayBuffer(fileInputElem.files[0]);
     }, false);
+  }
+
+  /**
+   * Draw wave form -- TESTING.
+   */
+  drawWaveForm() {
+    const analyzer = this.analyzer;
+    const bufferSize = analyzer.fftSize;
+    const dataArray = new Float32Array(bufferSize);
+    const scribble = this.scribble;
+    let x = 0;
+    let prevY = 0;
+
+    function draw() {
+      const drawVisual = requestAnimationFrame(draw);
+      analyzer.getFloatTimeDomainData(dataArray);
+
+      for (let magnitude in dataArray) {
+        scribble.scribbleLine(x, prevY, x + 15, magnitude);
+        console.log(x + ', ' + prevY);
+        x += 15;
+        prevY = magnitude;
+
+        // right-limit to x value
+        if (x > 1024) {
+          x = 0;
+        }
+      }
+    }
+
+    draw();
   }
 }
