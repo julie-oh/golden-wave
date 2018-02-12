@@ -1,20 +1,23 @@
 <html>
-  <head>
+<head>
+    <meta charset="UTF-8">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.16/p5.js"></script>
     <script language="javascript" type="text/javascript" src="https://cdn.rawgit.com/generative-light/p5.scribble.js/master/p5.scribble.js"></script>
-    <script language="javascript" type="text/javascript" src="./p5.scribble.js"></script>
+    <script language="javascript" src="./audio_player.js"></script>
     <script language="javascript">
       function setup() {
         var canvas = createCanvas(windowWidth, windowHeight);
         background(255);
         var scribble = new Scribble();
+        var audioPlayer = new AudioPlayer(scribble);
         scribble.scribbleLine(0, 0, 100, 100);
-        scribble.scribbleLine(100, 100, 400, 800);
-        scribble.scribbleLine(400, 800, 800, 800);
       }
     </script>
-  </head>
-  <body>
-  </body>
+</head>
+<body>
+<div>
+    <input id="audiofile" type="file"/>
+</div>
+</body>
 </html>
 
