@@ -53,10 +53,10 @@ class AudioPlayer {
       const drawVisual = requestAnimationFrame(draw);
       analyzer.getFloatTimeDomainData(dataArray);
 
-      for (let magnitude in dataArray) {
-        scribble.scribbleLine(x, prevY, x + 15, magnitude);
-        console.log(x + ', ' + prevY);
-        x += 15;
+      for (let i = 0; i < bufferSize; i += 15) {
+        const magnitude = dataArray[i] * 1000;
+        scribble.scribbleLine(x, prevY, ++x, magnitude);
+        console.log(x + ', ' + magnitude);
         prevY = magnitude;
 
         // right-limit to x value
